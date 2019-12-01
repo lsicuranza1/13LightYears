@@ -18,8 +18,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import game.patterns.state.Modalita;
+import game.patterns.state.Stato;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -28,6 +32,7 @@ public class Board extends JPanel implements ActionListener {
     private final int DELAY = 10;
     private Timer timer;
     private SpaceShip spaceShip;
+    private Modalita modalita;
 
     public Board() {
 
@@ -39,9 +44,10 @@ public class Board extends JPanel implements ActionListener {
         addKeyListener(new TAdapter());
         setBackground(Color.BLACK);
         setFocusable(true);
-
+        setModalita(new Modalita());
+        //si deve settare qui il menu principale 
         spaceShip = new SpaceShip(ICRAFT_X, ICRAFT_Y);
-
+        
         timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -76,8 +82,16 @@ public class Board extends JPanel implements ActionListener {
 
         updateMissiles();
         updateSpaceShip();
+        
+        
 
         repaint();
+    }
+    
+    //TO DO da chiamare quando le vite della spaceship diventano zero e gestire le varie schermate
+    public void manageLifes() {
+    	Stato stato = modalita.getStatoModalita();
+    	stato.gestioneStato(modalita, "game_over");
     }
 
     private void updateMissiles() {
@@ -103,7 +117,15 @@ public class Board extends JPanel implements ActionListener {
         spaceShip.move();
     }
 
-    private class TAdapter extends KeyAdapter {
+    public Modalita getModalita() {
+		return modalita;
+	}
+
+	public void setModalita(Modalita modalita) {
+		this.modalita = modalita;
+	}
+
+	private class TAdapter extends KeyAdapter {
 
         @Override
         public void keyReleased(KeyEvent e) {
@@ -113,6 +135,12 @@ public class Board extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e) {
             spaceShip.keyPressed(e);
+            
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            	Stato stato = modalita.getStatoModalita();
+            	stato.gestioneStato(modalita, "game_over");
+            	
+            }
         }
     }
 }
