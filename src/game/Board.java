@@ -23,7 +23,7 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
-    private final int ICRAFT_X = 120;
+    private final int ICRAFT_X = 100;
     private final int ICRAFT_Y = 600;
     private final int DELAY = 10;
     private Timer timer;
