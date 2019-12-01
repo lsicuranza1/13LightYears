@@ -124,7 +124,7 @@ public class ObstaclesBackground extends JPanel {
         }
 
         public void move() {
-            y += 55;
+            y += 5;
         }
     }
     
